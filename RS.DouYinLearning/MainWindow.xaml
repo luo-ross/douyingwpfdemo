@@ -1,0 +1,1975 @@
+﻿<rs:RSDouYinWindow
+    x:Class="RS.DouYinLearning.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:RS.DouYinLearning"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="clr-namespace:RS.DouYinLearning.Models"
+    xmlns:rs="https://streamingtool.douyin.com/wpf/learning/2024"
+    x:Name="this"
+    Title="MainWindow"
+    MinWidth="1080"
+    MinHeight="720"
+    MouseLeftButtonUp="RSDouYinWindow_PreviewMouseLeftButtonUp"
+    MouseMove="RSDouYinWindow_MouseMove"
+    PreviewMouseLeftButtonDown="RSDouYinWindow_PreviewMouseLeftButtonDown"
+    WindowStartupLocation="CenterScreen"
+    WindowState="Normal"
+    mc:Ignorable="d">
+    <rs:RSDouYinWindow.DataContext>
+        <local:MainWindowViewModel />
+    </rs:RSDouYinWindow.DataContext>
+    <rs:RSDouYinWindow.Resources>
+        <ResourceDictionary>
+            <BackEase x:Key="BackEaseAnimation" EasingMode="EaseInOut" />
+            <Storyboard x:Key="ScaleYAnimation">
+                <DoubleAnimation
+                    AutoReverse="True"
+                    EasingFunction="{StaticResource BackEaseAnimation}"
+                    RepeatBehavior="Forever"
+                    Storyboard.TargetName="PART_LogIcon"
+                    Storyboard.TargetProperty="RenderTransform.Children[0].ScaleY"
+                    From="1"
+                    To="-1"
+                    Duration="0:0:2.5" />
+            </Storyboard>
+
+
+
+            <ControlTemplate x:Key="Test">
+                <Border Padding="5,10,5,10">
+                    <StackPanel>
+                        <Button
+                            Padding="10,8,10,8"
+                            HorizontalAlignment="Stretch"
+                            Content="转场"
+                            FontSize="15"
+                            Style="{StaticResource RSDouYin.Styles.IconWithDesButton}" />
+                        <Button
+                            Padding="10,8,10,8"
+                            HorizontalAlignment="Stretch"
+                            Content="重命令"
+                            FontSize="15"
+                            Style="{StaticResource RSDouYin.Styles.IconWithDesButton}" />
+                        <Button
+                            Padding="10,8,10,8"
+                            HorizontalAlignment="Stretch"
+                            Content="删除场景"
+                            FontSize="15"
+                            Foreground="#cb332f"
+                            Style="{StaticResource RSDouYin.Styles.IconWithDesButton}" />
+                    </StackPanel>
+                </Border>
+
+            </ControlTemplate>
+
+
+            <Style x:Key="RSDouYin.Styles.SystemInfo" TargetType="{x:Type TextBlock}">
+                <Setter Property="Margin" Value="5,0,3,0" />
+                <Setter Property="Foreground" Value="#969091" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+            </Style>
+
+
+
+            <Style
+                x:Key="RSDouYin.Styles.SystemIconInfo"
+                BasedOn="{StaticResource RSDouYin.Styles.IconButton}"
+                TargetType="{x:Type Button}">
+                <Setter Property="HorizontalAlignment" Value="Left" />
+                <Setter Property="Foreground" Value="#969091" />
+                <Setter Property="Margin" Value="0" />
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="Transparent" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+
+            <Style
+                x:Key="RSDouYin.Styles.CloseLiveButton"
+                BasedOn="{StaticResource RSDouYin.Styles.ButtonBase}"
+                TargetType="{x:Type Button}">
+                <Setter Property="Foreground" Value="#fff" />
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="Padding" Value="10" />
+                <Setter Property="Margin" Value="0,5,5,5" />
+                <Setter Property="Background" Value="#292929" />
+                <Setter Property="FontWeight" Value="Bold" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border
+                                Padding="{TemplateBinding Padding}"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="{TemplateBinding rs:ControlsHelper.CornerRadius}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition />
+                                        <ColumnDefinition Width="auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <ContentControl Content="{TemplateBinding Content}" TextBlock.FontSize="{TemplateBinding FontSize}" />
+                                    <TextBlock
+                                        Grid.Column="1"
+                                        Margin="5,0,0,0"
+                                        VerticalAlignment="Center"
+                                        FontSize="{TemplateBinding FontSize}"
+                                        Foreground="{TemplateBinding Foreground}"
+                                        Text="关播" />
+                                </Grid>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Cursor" Value="Hand" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <ControlTemplate x:Key="DouYinDegreeControlTemplate">
+                <Border
+                    Padding="8,2,8,2"
+                    VerticalAlignment="Center"
+                    Background="#6c76a6"
+                    CornerRadius="8">
+                    <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                        <Path
+                            Width="9"
+                            Height="12"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Data="{StaticResource RSDouYin.Icons.Medal}"
+                            Fill="Gold"
+                            Stretch="Fill" />
+                        <TextBlock
+                            Margin="5,0,0,0"
+                            VerticalAlignment="Center"
+                            FontSize="9"
+                            Foreground="#fff"
+                            Text="{Binding Degree}" />
+                    </StackPanel>
+                </Border>
+            </ControlTemplate>
+
+            <ControlTemplate x:Key="AudienceModelControlTemplate" TargetType="{x:Type RadioButton}">
+                <Border
+                    x:Name="PART_Border"
+                    Margin="0,5,0,5"
+                    Padding="5"
+                    VerticalAlignment="Center"
+                    Background="Transparent"
+                    CornerRadius="5">
+                    <Grid>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Border
+                                x:Name="PART_IsSelect"
+                                Width="2"
+                                Margin="0,5,15,5"
+                                Background="#E54969"
+                                Visibility="Hidden" />
+                            <Grid Grid.Column="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto" />
+                                    <ColumnDefinition Width="auto" />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition Width="auto" />
+                                </Grid.ColumnDefinitions>
+                                <Border
+                                    x:Name="PART_NumberBorder"
+                                    Grid.Column="0"
+                                    Padding="5,2,5,2"
+                                    VerticalAlignment="Center"
+                                    Background="Transparent"
+                                    CornerRadius="5">
+                                    <TextBlock
+                                        VerticalAlignment="Center"
+                                        FontSize="12"
+                                        Foreground="#FFF"
+                                        Text="{Binding Number}" />
+                                </Border>
+
+                                <Border
+                                    Grid.Column="1"
+                                    Width="35"
+                                    Height="35"
+                                    Margin="5,0,5,0"
+                                    VerticalAlignment="Center"
+                                    ClipToBounds="True"
+                                    CornerRadius="50">
+                                    <Border.Background>
+                                        <ImageBrush
+                                            ImageSource="{Binding ImgLink}"
+                                            RenderOptions.BitmapScalingMode="NearestNeighbor"
+                                            RenderOptions.EdgeMode="Aliased"
+                                            Stretch="UniformToFill" />
+                                    </Border.Background>
+                                </Border>
+                                <Grid Grid.Column="2" VerticalAlignment="Center">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <TextBlock
+                                        VerticalAlignment="Center"
+                                        FontSize="12"
+                                        Foreground="#fff"
+                                        Text="{Binding NickName}"
+                                        TextTrimming="CharacterEllipsis" />
+                                    <StackPanel
+                                        Grid.Row="1"
+                                        Margin="0,2,0,0"
+                                        VerticalAlignment="Center"
+                                        Orientation="Horizontal">
+                                        <ContentControl Template="{StaticResource DouYinDegreeControlTemplate}" />
+                                        <Border
+                                            Margin="5,0,5,0"
+                                            Padding="8,1,8,1"
+                                            VerticalAlignment="Center"
+                                            Background="#AA333333"
+                                            BorderBrush="#f1f2f3"
+                                            BorderThickness="1"
+                                            CornerRadius="8">
+                                            <TextBlock
+                                                x:Name="PART_Relation"
+                                                VerticalAlignment="Center"
+                                                FontSize="9"
+                                                Foreground="#fff"
+                                                TextTrimming="CharacterEllipsis" />
+                                        </Border>
+                                    </StackPanel>
+                                </Grid>
+
+                                <Grid Grid.Column="3" VerticalAlignment="Center">
+                                    <TextBlock
+                                        VerticalAlignment="Center"
+                                        Foreground="#FFF"
+                                        Text="{Binding Contribution}" />
+                                </Grid>
+                            </Grid>
+                        </Grid>
+
+                        <Popup
+                            x:Name="PART_Popup"
+                            AllowsTransparency="True"
+                            HorizontalOffset="-10"
+                            IsOpen="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=IsChecked}"
+                            Placement="Right"
+                            PlacementTarget="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                            StaysOpen="False"
+                            VerticalOffset="-2">
+                            <Border
+                                Width="280"
+                                Height="460"
+                                Margin="15"
+                                Background="#2F2F2F"
+                                BorderBrush="#545454"
+                                BorderThickness="1"
+                                CornerRadius="15">
+                                <Grid>
+                                    <Border Padding="10">
+                                        <StackPanel>
+                                            <StackPanel
+                                                Margin="15,15,15,10"
+                                                HorizontalAlignment="Left"
+                                                Orientation="Horizontal">
+                                                <Border
+                                                    Grid.Column="1"
+                                                    Width="60"
+                                                    Height="60"
+                                                    Margin="5,0,5,0"
+                                                    VerticalAlignment="Center"
+                                                    ClipToBounds="True"
+                                                    CornerRadius="50">
+                                                    <Border.Background>
+                                                        <ImageBrush
+                                                            ImageSource="{Binding ImgLink}"
+                                                            RenderOptions.BitmapScalingMode="NearestNeighbor"
+                                                            RenderOptions.EdgeMode="Aliased"
+                                                            Stretch="UniformToFill" />
+                                                    </Border.Background>
+                                                </Border>
+
+                                                <Button
+                                                    Width="110"
+                                                    Margin="10,0,0,0"
+                                                    VerticalAlignment="Center"
+                                                    Content="回关"
+                                                    Style="{StaticResource RSDouYin.Styles.NoIconBtn}" />
+
+                                                <Button
+                                                    Margin="10,0,0,0"
+                                                    Padding="5"
+                                                    VerticalAlignment="Center"
+                                                    rs:ControlsHelper.IconData="{StaticResource RSDouYin.Icons.Setting}"
+                                                    rs:ControlsHelper.IconHeight="14"
+                                                    rs:ControlsHelper.IconWidth="14"
+                                                    Style="{StaticResource RSDouYin.Styles.IconButton}"
+                                                    ToolTip="直播设置" />
+                                            </StackPanel>
+
+                                            <StackPanel Margin="20,0,0,0" Orientation="Horizontal">
+                                                <TextBlock
+                                                    VerticalAlignment="Center"
+                                                    FontSize="16"
+                                                    Foreground="#fff"
+                                                    Text="{Binding NickName}"
+                                                    TextTrimming="CharacterEllipsis" />
+
+                                                <ContentControl Margin="5,0,0,0" Template="{StaticResource DouYinDegreeControlTemplate}" />
+                                            </StackPanel>
+
+                                            <StackPanel Margin="20,10,0,0" Orientation="Horizontal">
+                                                <TextBlock
+                                                    VerticalAlignment="Center"
+                                                    FontSize="12"
+                                                    Foreground="#949494"
+                                                    Text="{Binding Location}"
+                                                    TextTrimming="CharacterEllipsis" />
+                                            </StackPanel>
+
+                                            <StackPanel Margin="20,10,0,0" Orientation="Horizontal">
+                                                <TextBlock
+                                                    VerticalAlignment="Center"
+                                                    FontSize="12"
+                                                    Foreground="#fff"
+                                                    TextTrimming="CharacterEllipsis">
+                                                    <Run Text="{Binding InterestCount}" />
+                                                    <Run Text="关注▪" />
+                                                    <Run Text="{Binding FansCount}" />
+                                                    <Run Text="粉丝" />
+                                                </TextBlock>
+                                            </StackPanel>
+
+                                            <Border Style="{StaticResource RSDouYin.Styles.AudiencePopupBorder}">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="auto" />
+                                                        <ColumnDefinition />
+                                                        <ColumnDefinition Width="auto" />
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <TextBlock
+                                                        Grid.Column="0"
+                                                        VerticalAlignment="Center"
+                                                        FontSize="14"
+                                                        Foreground="#fff"
+                                                        Text="粉丝团"
+                                                        TextTrimming="CharacterEllipsis" />
+
+                                                    <TextBlock
+                                                        x:Name="PART_IsFansTeam"
+                                                        Grid.Column="2"
+                                                        VerticalAlignment="Center"
+                                                        FontSize="14"
+                                                        Foreground="#fff"
+                                                        TextTrimming="CharacterEllipsis" />
+                                                </Grid>
+                                            </Border>
+
+                                            <Border
+                                                Padding="10,5,10,5"
+                                                HorizontalAlignment="Left"
+                                                Style="{StaticResource RSDouYin.Styles.AudiencePopupBorder}">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="auto" />
+                                                        <ColumnDefinition Width="auto" />
+                                                        <ColumnDefinition />
+                                                    </Grid.ColumnDefinitions>
+                                                    <StackPanel>
+                                                        <TextBlock
+                                                            Grid.Column="0"
+                                                            VerticalAlignment="Center"
+                                                            FontSize="11"
+                                                            Foreground="#fff"
+                                                            Text="礼物图鉴"
+                                                            TextTrimming="CharacterEllipsis" />
+                                                        <TextBlock
+                                                            Grid.Column="0"
+                                                            VerticalAlignment="Center"
+                                                            FontSize="11"
+                                                            Foreground="#fff"
+                                                            TextTrimming="CharacterEllipsis">
+                                                            <Run Text="{Binding GiftCollectionCount}" />
+                                                            <Run Text="/6" />
+                                                        </TextBlock>
+                                                    </StackPanel>
+                                                    <Image
+                                                        Grid.Column="1"
+                                                        Width="25"
+                                                        Height="25"
+                                                        Margin="5,0,0,0"
+                                                        Source="Assets/secretgift.png" />
+                                                </Grid>
+                                            </Border>
+
+                                            <Border Style="{StaticResource RSDouYin.Styles.AudiencePopupBorder}">
+                                                <StackPanel>
+                                                    <Grid Margin="0,8,0,8">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition />
+                                                            <ColumnDefinition Width="auto" />
+                                                        </Grid.ColumnDefinitions>
+                                                        <TextBlock
+                                                            FontSize="12"
+                                                            Foreground="#fff"
+                                                            Text="和我的直播互动" />
+                                                        <TextBlock
+                                                            Grid.Column="1"
+                                                            FontSize="9"
+                                                            Foreground="#fff">
+                                                            <Run Text="{Binding InteractionBegin, StringFormat='MM月dd日'}" />
+                                                            <Run Text="-" />
+                                                            <Run Text="{Binding InteractionEnd, StringFormat='MM月dd日'}" />
+                                                        </TextBlock>
+                                                    </Grid>
+
+                                                    <Grid Margin="0,8,0,8">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition />
+                                                            <ColumnDefinition Width="auto" />
+                                                        </Grid.ColumnDefinitions>
+                                                        <TextBlock
+                                                            FontSize="12"
+                                                            Foreground="#fff"
+                                                            Text="本场观看时长" />
+                                                        <TextBlock
+                                                            Grid.Column="1"
+                                                            FontSize="12"
+                                                            Foreground="#fff">
+                                                            <Run Text="{Binding ViewTime}" />
+                                                            <Run Text="分钟" />
+                                                        </TextBlock>
+                                                    </Grid>
+
+                                                    <Grid Margin="0,8,0,8">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition />
+                                                            <ColumnDefinition Width="auto" />
+                                                        </Grid.ColumnDefinitions>
+                                                        <TextBlock
+                                                            FontSize="12"
+                                                            Foreground="#fff"
+                                                            Text="过去7天观看直播" />
+                                                        <TextBlock
+                                                            Grid.Column="1"
+                                                            FontSize="12"
+                                                            Foreground="#fff">
+                                                            <Run Text="{Binding Last7DaysView}" />
+                                                            <Run Text="天" />
+                                                        </TextBlock>
+                                                    </Grid>
+
+                                                    <Grid Margin="0,8,0,8">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition />
+                                                            <ColumnDefinition Width="auto" />
+                                                        </Grid.ColumnDefinitions>
+                                                        <TextBlock
+                                                            FontSize="12"
+                                                            Foreground="#fff"
+                                                            Text="过去7天送礼" />
+                                                        <TextBlock
+                                                            Grid.Column="1"
+                                                            FontSize="12"
+                                                            Foreground="#fff">
+                                                            <Run Text="{Binding Last7DaysGift}" />
+                                                            <Run Text="次" />
+                                                        </TextBlock>
+                                                    </Grid>
+
+                                                    <Grid Margin="0,8,0,8">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition />
+                                                            <ColumnDefinition Width="auto" />
+                                                        </Grid.ColumnDefinitions>
+                                                        <TextBlock
+                                                            FontSize="12"
+                                                            Foreground="#fff"
+                                                            Text="过去7天评论" />
+                                                        <TextBlock
+                                                            Grid.Column="1"
+                                                            FontSize="12"
+                                                            Foreground="#fff">
+                                                            <Run Text="{Binding Last7DaysComments}" />
+                                                            <Run Text="条" />
+                                                        </TextBlock>
+                                                    </Grid>
+                                                </StackPanel>
+                                            </Border>
+                                        </StackPanel>
+                                    </Border>
+                                    <Path
+                                        Width="15"
+                                        Height="18"
+                                        Margin="0,20,-10,0"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Top"
+                                        Data="{StaticResource RSDouYin.Icons.RightTriangle}"
+                                        Fill="#2F2F2F"
+                                        Stretch="Fill" />
+                                </Grid>
+
+                                <Border.Effect>
+                                    <DropShadowEffect
+                                        BlurRadius="15"
+                                        Direction="315"
+                                        Opacity="0.2"
+                                        ShadowDepth="0"
+                                        Color="#000" />
+                                </Border.Effect>
+                            </Border>
+                        </Popup>
+                    </Grid>
+                </Border>
+
+                <ControlTemplate.Triggers>
+                    <DataTrigger Binding="{Binding Number}" Value="1">
+                        <Setter TargetName="PART_NumberBorder" Property="Background" Value="#B83032" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Number}" Value="2">
+                        <Setter TargetName="PART_NumberBorder" Property="Background" Value="#B7622C" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Number}" Value="3">
+                        <Setter TargetName="PART_NumberBorder" Property="Background" Value="#B58143" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding RelationShip}" Value="Stranger">
+                        <Setter TargetName="PART_Relation" Property="Visibility" Value="Collapsed" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding RelationShip}" Value="Fans">
+                        <Setter TargetName="PART_Relation" Property="Text" Value="粉丝" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding RelationShip}" Value="Friend">
+                        <Setter TargetName="PART_Relation" Property="Text" Value="朋友" />
+                    </DataTrigger>
+                    <Trigger SourceName="PART_Border" Property="IsMouseOver" Value="True">
+                        <Setter TargetName="PART_Border" Property="Opacity" Value="0.8" />
+                        <Setter Property="Cursor" Value="Hand" />
+                    </Trigger>
+
+                    <Trigger Property="IsChecked" Value="True">
+                        <Setter TargetName="PART_IsSelect" Property="Visibility" Value="Visible" />
+                    </Trigger>
+
+                    <DataTrigger Binding="{Binding IsFansTeam}" Value="True">
+                        <Setter TargetName="PART_IsFansTeam" Property="Text" Value="已加入" />
+                    </DataTrigger>
+
+                    <DataTrigger Binding="{Binding IsFansTeam}" Value="False">
+                        <Setter TargetName="PART_IsFansTeam" Property="Text" Value="未加入" />
+                    </DataTrigger>
+                </ControlTemplate.Triggers>
+            </ControlTemplate>
+
+            <DataTemplate x:Key="AudienceModelDataTemplate" DataType="{x:Type models:AudienceModel}">
+                <RadioButton>
+                    <RadioButton.Style>
+                        <Style TargetType="{x:Type RadioButton}">
+                            <Setter Property="GroupName" Value="AudienceModelGroup" />
+                            <Setter Property="Template" Value="{StaticResource AudienceModelControlTemplate}" />
+                        </Style>
+                    </RadioButton.Style>
+                </RadioButton>
+
+            </DataTemplate>
+
+
+
+
+            <Style x:Key="RSDouYin.Styles.SendMsgUserNameBtn" TargetType="{x:Type Button}">
+                <Setter Property="Foreground" Value="#8CE7FF" />
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+                <Setter Property="BorderBrush" Value="Transparent" />
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border
+                                Padding="{TemplateBinding Padding}"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="{TemplateBinding rs:ControlsHelper.CornerRadius}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto" />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+                                    <ContentControl
+                                        Grid.Column="0"
+                                        DataContext="{TemplateBinding DataContext}"
+                                        Template="{StaticResource DouYinDegreeControlTemplate}"
+                                        TextBlock.Foreground="{TemplateBinding Foreground}" />
+                                    <ContentControl
+                                        Grid.Column="1"
+                                        Margin="5,0,0,0"
+                                        VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                                        VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                        Content="{TemplateBinding Content}"
+                                        TextBlock.Foreground="{TemplateBinding Foreground}" />
+                                </Grid>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Cursor" Value="Hand" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding ElementName=TxtSendMessage, Path=Text}" Value="">
+                        <Setter Property="IsEnabled" Value="False" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
+
+
+
+
+
+            <ControlTemplate x:Key="NormalMsgControlTemplate">
+                <TextBlock
+                    Margin="0,5,0,0"
+                    VerticalAlignment="Center"
+                    FontSize="12"
+                    Foreground="#fff"
+                    TextWrapping="WrapWithOverflow">
+                    <InlineUIContainer BaselineAlignment="Center">
+                        <Button
+                            VerticalAlignment="Center"
+                            VerticalContentAlignment="Center"
+                            Content="{Binding NickName}"
+                            DataContext="{Binding BindsDirectlyToSource=True}"
+                            FontSize="12"
+                            Style="{StaticResource RSDouYin.Styles.SendMsgUserNameBtn}" />
+                    </InlineUIContainer>
+                    <Run Text=":" />
+                    <Run Text="{Binding MsgInfo}" />
+                </TextBlock>
+            </ControlTemplate>
+
+            <ControlTemplate x:Key="GreetingControlTemplate">
+                <Border
+                    Padding="5,0,5,0"
+                    HorizontalAlignment="Left"
+                    Background="#666acb"
+                    CornerRadius="10">
+                    <TextBlock
+                        Margin="0,5,0,0"
+                        VerticalAlignment="Center"
+                        FontSize="12"
+                        Foreground="#fff"
+                        TextWrapping="WrapWithOverflow">
+                        <InlineUIContainer BaselineAlignment="Center">
+                            <Button
+                                VerticalAlignment="Center"
+                                VerticalContentAlignment="Center"
+                                Content="{Binding NickName}"
+                                DataContext="{Binding BindsDirectlyToSource=True}"
+                                FontSize="12"
+                                Style="{StaticResource RSDouYin.Styles.SendMsgUserNameBtn}" />
+                        </InlineUIContainer>
+                        <Run x:Name="PART_GreetingTxt" />
+                    </TextBlock>
+                </Border>
+                <ControlTemplate.Triggers>
+                    <DataTrigger Binding="{Binding IsFansTeam}" Value="True">
+                        <Setter TargetName="PART_GreetingTxt" Property="Text" Value="通过 关注 来了" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding IsFansTeam}" Value="False">
+                        <Setter TargetName="PART_GreetingTxt" Property="Text" Value="来了" />
+                    </DataTrigger>
+                </ControlTemplate.Triggers>
+            </ControlTemplate>
+
+            <ControlTemplate x:Key="InterestControlTemplate">
+                <TextBlock
+                    Margin="0,5,0,0"
+                    VerticalAlignment="Center"
+                    FontSize="12"
+                    Foreground="#fff"
+                    TextWrapping="WrapWithOverflow">
+                    <InlineUIContainer BaselineAlignment="Center">
+                        <Button
+                            VerticalAlignment="Center"
+                            VerticalContentAlignment="Center"
+                            Content="{Binding NickName}"
+                            DataContext="{Binding BindsDirectlyToSource=True}"
+                            FontSize="12"
+                            Style="{StaticResource RSDouYin.Styles.SendMsgUserNameBtn}" />
+                    </InlineUIContainer>
+                    <Run Text=" 关注了你" />
+                </TextBlock>
+            </ControlTemplate>
+
+
+            <DataTemplate DataType="{x:Type models:MsgModel}">
+                <ContentControl
+                    x:Name="PART_MsgModelTemplate"
+                    Margin="0,3,0,3"
+                    VerticalAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    Template="{x:Null}" />
+                <DataTemplate.Triggers>
+                    <DataTrigger Binding="{Binding MsgType}" Value="NormalMsg">
+                        <Setter TargetName="PART_MsgModelTemplate" Property="Template" Value="{StaticResource NormalMsgControlTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding MsgType}" Value="Greeting">
+                        <Setter TargetName="PART_MsgModelTemplate" Property="Template" Value="{StaticResource GreetingControlTemplate}" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding MsgType}" Value="Interest">
+                        <Setter TargetName="PART_MsgModelTemplate" Property="Template" Value="{StaticResource InterestControlTemplate}" />
+                    </DataTrigger>
+                </DataTemplate.Triggers>
+            </DataTemplate>
+
+
+        </ResourceDictionary>
+
+    </rs:RSDouYinWindow.Resources>
+    <rs:RSDouYinWindow.WinCommandContent>
+        <Border>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+
+                    <Grid>
+                        <Path
+                            x:Name="PART_LogIcon"
+                            Width="22"
+                            Height="15"
+                            Margin="5,0,5,0"
+                            Data="M512 802c-115.774 0-225.359-27.495-308.567-77.42-42.745-25.646-76.681-56.046-100.865-90.353C75.649 596.042 62 554.919 62 512c0-42.918 13.649-84.042 40.567-122.228 24.185-34.307 58.121-64.706 100.865-90.353C286.641 249.495 396.226 222 512 222s225.359 27.495 308.567 77.42c42.745 25.646 76.681 56.046 100.865 90.353C948.352 427.958 962 469.082 962 512c0 42.919-13.648 84.042-40.567 122.228-24.185 34.307-58.12 64.706-100.865 90.353C737.359 774.505 627.774 802 512 802z m0-480c-97.913 0-189.226 22.434-257.118 63.169C220.194 405.982 162 450.136 162 512c0 61.865 58.194 106.018 92.882 126.831C322.774 679.566 414.087 702 512 702s189.227-22.434 257.118-63.169C803.807 618.018 862 573.865 862 512c0-61.865-58.193-106.018-92.882-126.831C701.227 344.434 609.913 322 512 322z"
+                            Fill="#FFF"
+                            RenderTransformOrigin="0.5,0.5"
+                            Stretch="Fill">
+                            <Path.RenderTransform>
+                                <TransformGroup>
+                                    <!--<RotateTransform Angle="45" CenterX="0.5" CenterY="0.5" />-->
+                                    <ScaleTransform x:Name="PathScaleTransform" ScaleY="0.5" />
+                                </TransformGroup>
+                            </Path.RenderTransform>
+                        </Path>
+                    </Grid>
+
+
+
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontSize="15"
+                        FontWeight="Bold"
+                        Foreground="#f4efef"
+                        Text="直播伴侣" />
+
+                    <Border
+                        Width="5"
+                        Height="5"
+                        Margin="10,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Background="#7a7a7a"
+                        CornerRadius="10" />
+
+                    <TextBlock
+                        Margin="5,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontSize="12"
+                        FontWeight="Bold"
+                        Foreground="#7a7a7a"
+                        Text="抖音" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="2" Orientation="Horizontal">
+                    <Button
+                        Content="主播中心"
+                        Style="{StaticResource RSDouYin.Styles.IconWithDesButton}"
+                        ToolTip="主播中心" />
+
+                    <Button
+                        rs:ControlsHelper.IconData="{StaticResource RSDouYin.Icons.CustomerService}"
+                        Style="{StaticResource RSDouYin.Styles.IconButton}"
+                        ToolTip="我的客服" />
+                    <Button
+                        rs:ControlsHelper.IconData="{StaticResource RSDouYin.Icons.Message}"
+                        Style="{StaticResource RSDouYin.Styles.IconButton}"
+                        ToolTip="打开抖音消息" />
+                    <Button
+                        rs:ControlsHelper.IconData="{StaticResource RSDouYin.Icons.Question}"
+                        Style="{StaticResource RSDouYin.Styles.IconButton}"
+                        ToolTip="帮助中心" />
+                    <Button
+                        rs:ControlsHelper.IconData="{StaticResource RSDouYin.Icons.More}"
+                        rs:ControlsHelper.IconHeight="12"
+                        Style="{StaticResource RSDouYin.Styles.IconButton}"
+                        ToolTip="更多" />
+
+                    <Button Content="行云游者" ToolTip="账号设置">
+                        <Button.Style>
+                            <Style TargetType="{x:Type Button}">
+                                <Setter Property="BorderThickness" Value="0" />
+                                <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
+                                <Setter Property="Padding" Value="0" />
+                                <Setter Property="Margin" Value="5,0,5,0" />
+                                <Setter Property="Height" Value="25" />
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="VerticalAlignment" Value="Stretch" />
+                                <Setter Property="BorderThickness" Value="0" />
+                                <Setter Property="Foreground" Value="#fff" />
+                                <Setter Property="VerticalContentAlignment" Value="Center" />
+                                <Setter Property="Background" Value="#22EEEEEE" />
+                                <Setter Property="rs:ControlsHelper.CornerRadius" Value="12" />
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type Button}">
+                                            <Border
+                                                Padding="{TemplateBinding Padding}"
+                                                Background="{TemplateBinding Background}"
+                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                BorderThickness="{TemplateBinding BorderThickness}"
+                                                CornerRadius="{TemplateBinding rs:ControlsHelper.CornerRadius}">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition />
+                                                        <ColumnDefinition />
+                                                    </Grid.ColumnDefinitions>
+                                                    <Border
+                                                        Width="{TemplateBinding Height}"
+                                                        Height="{TemplateBinding Height}"
+                                                        CornerRadius="{TemplateBinding rs:ControlsHelper.CornerRadius}">
+                                                        <Border.Background>
+                                                            <ImageBrush ImageSource="Assets/ross.jpeg" Stretch="Uniform" />
+                                                        </Border.Background>
+                                                    </Border>
+                                                    <ContentControl
+                                                        Grid.Column="1"
+                                                        Margin="5,0,8,0"
+                                                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                        Content="{TemplateBinding Content}"
+                                                        FontSize="12" />
+                                                </Grid>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Cursor" Value="Hand" />
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                    <Border Style="{StaticResource RSDouYin.Styles.SplitVertical}" />
+                </StackPanel>
+            </Grid>
+        </Border>
+    </rs:RSDouYinWindow.WinCommandContent>
+    <Grid>
+        <Border x:Name="BorderHost" Padding="5">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="270" />
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="270" />
+                </Grid.ColumnDefinitions>
+
+                <Grid Grid.Column="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="270" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Border
+                        Grid.Row="0"
+                        Padding="5"
+                        Style="{StaticResource RSDouYin.Styles.ContentBorder}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto" />
+                                <RowDefinition />
+                                <RowDefinition Height="auto" />
+                            </Grid.RowDefinitions>
+                            <StackPanel Grid.Row="0">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto" />
+                                        <ColumnDefinition />
+                                        <ColumnDefinition Width="auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0">
+                                        <rs:RSDropDownBtn
+                                            rs:ControlsHelper.IconData="{StaticResource RSDouYin.Icons.DownArrow}"
+                                            ButtonModelList="{Binding ButtonModelList}"
+                                            Content="常规模式" />
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="2" Orientation="Horizontal">
+                                        <Button
+                                            Margin="5,0,3,0"
+                                            Padding="8,5,8,5"
+                                            VerticalAlignment="Center"
+                                            rs:ControlsHelper.IconData="{StaticResource RSDouYin.Icons.Swap}"
+                                            Content="导播"
+                                            Style="{StaticResource RSDouYin.Styles.IconWithDesButton}"
+                                            ToolTip="导播" />
+                                        <Border Margin="0" Style="{StaticResource RSDouYin.Styles.SplitVertical}" />
+
+                                        <Button
+                                            Padding="5"
+                                            VerticalAlignment="Center"
+                                            rs:ControlsHelper.IconData="{StaticResource RSDouYin.Icons.WinSwap}"
+                                            rs:ControlsHelper.IconHeight="14"
+                                            rs:ControlsHelper.IconWidth="14"
+                                            Style="{StaticResource RSDouYin.Styles.IconButton}"
+                                            ToolTip="悬浮窗" />
+                                    </StackPanel>
+                                </Grid>
+
+                                <WrapPanel>
+                                    <rs:RSSceneBtn Content="场景一" PopContentTemplate="{StaticResource Test}" />
+                                    <rs:RSSceneBtn Content="场景二" PopContentTemplate="{StaticResource Test}" />
+                                    <rs:RSSceneBtn Content="场景三" PopContentTemplate="{StaticResource Test}" />
+                                    <rs:RSSceneBtn Content="场景七" PopContentTemplate="{StaticResource Test}" />
+                                    <Button
+                                        Margin="5"
+                                        Padding="5"
+                                        VerticalAlignment="Center"
+                                        rs:ControlsHelper.IconData="{StaticResource RSDouYin.Icons.Plus}"
+                                        rs:ControlsHelper.IconHeight="14"
+                                        rs:ControlsHelper.IconWidth="14"
+                                        Background="#434343"
+                                        Style="{StaticResource RSDouYin.Styles.IconButton}" />
+
+                                </WrapPanel>
+                                <Border Style="{StaticResource RSDouYin.Styles.SplitHorizontal}" />
+
+                            </StackPanel>
+
+                            <ScrollViewer Grid.Row="1" Margin="0,3,0,3">
+                                <StackPanel x:Name="MyStack">
+                                    <rs:WinMonitorBtn
+                                        x:Name="BtnMonitor1"
+                                        Content="显示器一"
+                                        GroupName="WinMonitorGroup"
+                                        LockMaterialsClick="BtnMonitor1_LockMaterialsClick"
+                                        OnEyeShowHideClick="BtnMonitor1_OnCkEyeShowHide" />
+                                    <rs:WinMonitorBtn
+                                        x:Name="BtnMonitor2"
+                                        Content="显示器二"
+                                        GroupName="WinMonitorGroup" />
+                                </StackPanel>
+                            </ScrollViewer>
+
+
+                            <Border
+                                Grid.Row="2"
+                                Margin="0,3,0,0"
+                                Padding="0,3,0,3"
+                                Background="#1f1f1f"
+                                CornerRadius="5">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto" />
+                                        <ColumnDefinition />
+                                        <ColumnDefinition Width="auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Button rs:ControlsHelper.IconData="{StaticResource RSDouYin.Icons.Plus}" Content="添加素材">
+                                        <Button.Style>
+                                            <Style BasedOn="{StaticResource RSDouYin.Styles.IconWithDesButton}" TargetType="{x:Type Button}">
+                                                <Setter Property="HorizontalAlignment" Value="Left" />
+                                                <Setter Property="Margin" Value="0" />
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Background" Value="Transparent" />
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+
+                                    <Button Grid.Column="2" Content="清空">
+                                        <Button.Style>
+                                            <Style BasedOn="{StaticResource RSDouYin.Styles.IconWithDesButton}" TargetType="{x:Type Button}">
+                                                <Setter Property="HorizontalAlignment" Value="Left" />
+                                                <Setter Property="Margin" Value="0" />
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Background" Value="Transparent" />
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                </Grid>
+
+                            </Border>
+
+                        </Grid>
+
+                    </Border>
+
+
+                    <Border Grid.Row="1" Style="{StaticResource RSDouYin.Styles.ContentBorder}">
+                        <StackPanel>
+                            <TextBlock
+                                Margin="5,10,0,5"
+                                VerticalAlignment="Center"
+                                FontSize="14"
+                                Foreground="#fff"
+                                Text="互动玩法" />
+
+                            <WrapPanel Margin="0,3,0,3">
+                                <Button
+                                    rs:ControlsHelper.IconData="{StaticResource RSDouYin.Icons.PK}"
+                                    rs:ControlsHelper.IconWidth="25"
+                                    Content="PK连线"
+                                    Style="{StaticResource RSDouYin.Styles.CmdButton}" />
+
+                                <Button
+                                    rs:ControlsHelper.IconData="{StaticResource RSDouYin.Icons.PK}"
+                                    rs:ControlsHelper.IconWidth="25"
+                                    Content="观众连线"
+                                    Style="{StaticResource RSDouYin.Styles.CmdButton}" />
+
+                                <Button
+                                    rs:ControlsHelper.IconData="{StaticResource RSDouYin.Icons.PK}"
+                                    rs:ControlsHelper.IconWidth="25"
+                                    Content="福袋"
+                                    Style="{StaticResource RSDouYin.Styles.CmdButton}" />
+
+                                <Button
+                                    rs:ControlsHelper.IconData="{StaticResource RSDouYin.Icons.PK}"
+                                    rs:ControlsHelper.IconWidth="25"
+                                    Content="宠粉红包"
+                                    Style="{StaticResource RSDouYin.Styles.CmdButton}" />
+
+
+                                <Button
+                                    rs:ControlsHelper.IconData="{StaticResource RSDouYin.Icons.PK}"
+                                    rs:ControlsHelper.IconWidth="25"
+                                    Content="心愿"
+                                    Style="{StaticResource RSDouYin.Styles.CmdButton}" />
+
+                                <Button
+                                    rs:ControlsHelper.IconData="{StaticResource RSDouYin.Icons.PK}"
+                                    rs:ControlsHelper.IconWidth="25"
+                                    Content="礼物菜单"
+                                    Style="{StaticResource RSDouYin.Styles.CmdButton}" />
+
+                                <Button
+                                    rs:ControlsHelper.IconData="{StaticResource RSDouYin.Icons.PK}"
+                                    rs:ControlsHelper.IconWidth="25"
+                                    Content="礼物投票"
+                                    Style="{StaticResource RSDouYin.Styles.CmdButton}" />
+
+                                <Button
+                                    rs:ControlsHelper.IconData="{StaticResource RSDouYin.Icons.PK}"
+                                    rs:ControlsHelper.IconWidth="25"
+                                    Content="礼物展馆"
+                                    Style="{StaticResource RSDouYin.Styles.CmdButton}" />
+                            </WrapPanel>
+
+                            <Grid Margin="5,20,0,10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto" />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition Width="auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    FontSize="14"
+                                    Foreground="#fff"
+                                    Text="直播工具" />
+
+                                <Button
+                                    Grid.Column="2"
+                                    rs:ControlsHelper.IconData="{StaticResource RSDouYin.Icons.RightArrow}"
+                                    Content="全部">
+                                    <Button.Style>
+                                        <Style BasedOn="{StaticResource RSDouYin.Styles.ButtonBase}" TargetType="{x:Type Button}">
+                                            <Setter Property="rs:ControlsHelper.IconWidth" Value="5" />
+                                            <Setter Property="rs:ControlsHelper.IconHeight" Value="9" />
+                                            <Setter Property="Foreground" Value="#DDD" />
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="{x:Type Button}">
+                                                        <Border
+                                                            Padding="{TemplateBinding Padding}"
+                                                            Background="{TemplateBinding Background}"
+                                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                                            CornerRadius="{TemplateBinding rs:ControlsHelper.CornerRadius}">
+                                                            <StackPanel Orientation="Horizontal">
+                                                                <ContentControl
+                                                                    Grid.Row="1"
+                                                                    HorizontalAlignment="Center"
+                                                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                                    Content="{TemplateBinding Content}"
+                                                                    FontSize="{TemplateBinding FontSize}"
+                                                                    TextBlock.Foreground="{TemplateBinding Foreground}" />
+                                                                <Path
+                                                                    x:Name="PART_Icon"
+                                                                    Width="{TemplateBinding rs:ControlsHelper.IconWidth}"
+                                                                    Height="{TemplateBinding rs:ControlsHelper.IconHeight}"
+                                                                    Margin="5,0,0,0"
+                                                                    HorizontalAlignment="Center"
+                                                                    VerticalAlignment="Center"
+                                                                    Data="{TemplateBinding rs:ControlsHelper.IconData}"
+                                                                    Fill="#FFFFFF"
+                                                                    Stretch="Fill" />
+                                                            </StackPanel>
+                                                        </Border>
+                                                        <ControlTemplate.Triggers>
+                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                <Setter Property="Cursor" Value="Hand" />
+                                                            </Trigger>
+                                                            <Trigger SourceName="PART_Icon" Property="Data" Value="{x:Null}">
+                                                                <Setter TargetName="PART_Icon" Property="Visibility" Value="Collapsed" />
+                                                            </Trigger>
+                                                        </ControlTemplate.Triggers>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
+                            </Grid>
+
+                            <WrapPanel Margin="0,3,0,3">
+                                <Button
+                                    rs:ControlsHelper.IconData="{StaticResource RSDouYin.Icons.PK}"
+                                    rs:ControlsHelper.IconWidth="25"
+                                    Content="直播设置"
+                                    Style="{StaticResource RSDouYin.Styles.CmdButton}" />
+
+                                <Button
+                                    rs:ControlsHelper.IconData="{StaticResource RSDouYin.Icons.PK}"
+                                    rs:ControlsHelper.IconWidth="25"
+                                    Content="虚拟形象"
+                                    Style="{StaticResource RSDouYin.Styles.CmdButton}" />
+
+                                <Button
+                                    rs:ControlsHelper.IconData="{StaticResource RSDouYin.Icons.PK}"
+                                    rs:ControlsHelper.IconWidth="25"
+                                    Content="素材库"
+                                    Style="{StaticResource RSDouYin.Styles.CmdButton}" />
+
+                                <Button
+                                    rs:ControlsHelper.IconData="{StaticResource RSDouYin.Icons.PK}"
+                                    rs:ControlsHelper.IconWidth="25"
+                                    Content="互动工具"
+                                    Style="{StaticResource RSDouYin.Styles.CmdButton}" />
+
+
+                                <Button
+                                    rs:ControlsHelper.IconData="{StaticResource RSDouYin.Icons.PK}"
+                                    rs:ControlsHelper.IconWidth="25"
+                                    Content="人气宝箱"
+                                    Style="{StaticResource RSDouYin.Styles.CmdButton}" />
+
+                                <Button
+                                    rs:ControlsHelper.IconData="{StaticResource RSDouYin.Icons.PK}"
+                                    rs:ControlsHelper.IconWidth="25"
+                                    Content="游戏玩法"
+                                    Style="{StaticResource RSDouYin.Styles.CmdButton}" />
+
+                                <Button
+                                    rs:ControlsHelper.IconData="{StaticResource RSDouYin.Icons.PK}"
+                                    rs:ControlsHelper.IconWidth="25"
+                                    Content="抖音电商"
+                                    Style="{StaticResource RSDouYin.Styles.CmdButton}" />
+
+                                <Button
+                                    rs:ControlsHelper.IconData="{StaticResource RSDouYin.Icons.PK}"
+                                    rs:ControlsHelper.IconWidth="25"
+                                    Content="游戏"
+                                    Style="{StaticResource RSDouYin.Styles.CmdButton}" />
+                            </WrapPanel>
+
+                        </StackPanel>
+
+                    </Border>
+                </Grid>
+                <Border Grid.Column="1" Margin="8,15,8,0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition />
+                            <RowDefinition Height="auto" />
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Border
+                                Grid.Column="0"
+                                Width="55"
+                                Height="55"
+                                CornerRadius="10">
+                                <Border.Background>
+                                    <ImageBrush ImageSource="Assets/ross.jpeg" Stretch="Uniform" />
+                                </Border.Background>
+                            </Border>
+
+                            <Border Grid.Column="1" Padding="10,5,0,5">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <Grid Margin="0,3,0,3">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition />
+                                            <ColumnDefinition Width="auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock
+                                                VerticalAlignment="Center"
+                                                FontSize="14"
+                                                Foreground="#fff"
+                                                Text="C#程序开发" />
+                                            <Button
+                                                Padding="5"
+                                                VerticalAlignment="Center"
+                                                rs:ControlsHelper.IconData="{StaticResource RSDouYin.Icons.Edit}"
+                                                rs:ControlsHelper.IconHeight="14"
+                                                rs:ControlsHelper.IconWidth="14"
+                                                Style="{StaticResource RSDouYin.Styles.IconButton}"
+                                                ToolTip="编辑" />
+                                        </StackPanel>
+
+                                        <StackPanel Grid.Column="2" Orientation="Horizontal">
+                                            <Path
+                                                Width="15"
+                                                Height="15"
+                                                Margin="5,0,5,0"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                Data="{StaticResource RSDouYin.Icons.Audience}"
+                                                Fill="#DDD"
+                                                Stretch="Fill" />
+                                            <TextBlock
+                                                Margin="5,0,10,0"
+                                                VerticalAlignment="Center"
+                                                FontSize="14"
+                                                Foreground="#DDD"
+                                                Text="10万+" />
+
+                                            <Path
+                                                Width="15"
+                                                Height="15"
+                                                Margin="5,0,5,3"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                Data="{StaticResource RSDouYin.Icons.ThumbUp}"
+                                                Fill="#DDD"
+                                                Stretch="Fill" />
+
+                                            <TextBlock
+                                                Margin="5,0,10,0"
+                                                VerticalAlignment="Center"
+                                                FontSize="14"
+                                                Foreground="#DDD"
+                                                Text="1万+" />
+
+                                            <Path
+                                                Width="15"
+                                                Height="15"
+                                                Margin="5,0,5,3"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                Data="{StaticResource RSDouYin.Icons.Gift}"
+                                                Fill="#DDD"
+                                                Stretch="Fill" />
+
+                                            <TextBlock
+                                                Margin="5,0,10,0"
+                                                VerticalAlignment="Center"
+                                                FontSize="14"
+                                                Foreground="#DDD"
+                                                Text="0" />
+
+
+                                            <Button
+                                                Padding="5"
+                                                VerticalAlignment="Center"
+                                                rs:ControlsHelper.IconData="{StaticResource RSDouYin.Icons.Operate}"
+                                                rs:ControlsHelper.IconHeight="14"
+                                                rs:ControlsHelper.IconWidth="14"
+                                                Click="Button_Click"
+                                                Style="{StaticResource RSDouYin.Styles.IconButton}"
+                                                ToolTip="直播经营" />
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <Grid Grid.Row="1" Margin="0,3,0,8">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition />
+                                            <ColumnDefinition Width="auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Border
+                                                Padding="3"
+                                                Background="#3d3d3d"
+                                                CornerRadius="5">
+                                                <TextBlock
+                                                    VerticalAlignment="Center"
+                                                    FontSize="14"
+                                                    Foreground="#fff"
+                                                    Text="其他非游戏直播" />
+                                            </Border>
+
+
+                                            <Grid ClipToBounds="True">
+                                                <Button
+                                                    x:Name="BtnHourChart"
+                                                    Margin="10,0,5,-50"
+                                                    Content="小时榜"
+                                                    Style="{StaticResource RSDouYin.Styles.PopularityChart}" />
+                                                <Button
+                                                    x:Name="BtnPopularityChart"
+                                                    Margin="10,0,5,-50"
+                                                    Content="人气榜"
+                                                    Style="{StaticResource RSDouYin.Styles.PopularityChart}" />
+                                            </Grid>
+
+                                        </StackPanel>
+
+                                    </Grid>
+                                </Grid>
+                            </Border>
+                        </Grid>
+                        <Border Grid.Row="1">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <Border Padding="5">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition />
+                                            <ColumnDefinition Width="auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <CheckBox
+                                            Grid.Column="1"
+                                            Margin="5,0,0,0"
+                                            Content="竖屏拉伸模式"
+                                            Style="{StaticResource RSDouYin.Styles.CheckBox}">
+                                            <CheckBox.ToolTip>
+                                                <Border
+                                                    Width="180"
+                                                    Height="210"
+                                                    Padding="5"
+                                                    Background="Transparent">
+                                                    <Grid>
+                                                        <StackPanel>
+                                                            <Path
+                                                                x:Name="PART_Icon"
+                                                                Grid.Column="0"
+                                                                Width="85"
+                                                                Height="110"
+                                                                Margin="0,5,0,0"
+                                                                Data="{StaticResource RSDouYin.Icons.HorizontalVerticalScreens}"
+                                                                Fill="#5ECDFD"
+                                                                Stretch="Fill" />
+
+                                                            <TextBlock
+                                                                Margin="0,10,0,0"
+                                                                HorizontalAlignment="Center"
+                                                                VerticalAlignment="Center"
+                                                                FontSize="14"
+                                                                Text="竖屏拉升模式" />
+
+                                                            <TextBlock
+                                                                Margin="0,10,0,0"
+                                                                HorizontalAlignment="Left"
+                                                                VerticalAlignment="Center"
+                                                                FontSize="14"
+                                                                Text="游戏画面将放大居中显示,切换全屏可以观看完整画面"
+                                                                TextWrapping="WrapWithOverflow" />
+                                                        </StackPanel>
+
+                                                    </Grid>
+                                                </Border>
+                                            </CheckBox.ToolTip>
+                                        </CheckBox>
+                                    </Grid>
+                                </Border>
+
+                                <Border
+                                    x:Name="Bar"
+                                    Grid.Row="1"
+                                    VerticalAlignment="Top"
+                                    Background="Transparent">
+                                    <Border.Style>
+                                        <Style TargetType="{x:Type Border}">
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="BorderThickness" Value="2" />
+                                                    <Setter Property="BorderBrush" Value="#2294ff" />
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    <MediaElement
+                                        x:Name="MediaVideo"
+                                        Loaded="MediaVideo_Loaded"
+                                        LoadedBehavior="Manual"
+                                        MediaEnded="MediaVideo_MediaEnded"
+                                        Source="Assets/ocean.mp4" />
+                                </Border>
+                            </Grid>
+                        </Border>
+                        <Border Grid.Row="2">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <Border
+                                    Grid.Row="0"
+                                    Margin="0,10,0,10"
+                                    Padding="5"
+                                    Background="#141414"
+                                    CornerRadius="8">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition />
+                                            <ColumnDefinition Width="auto" />
+                                        </Grid.ColumnDefinitions>
+
+
+                                        <WrapPanel VerticalAlignment="Center">
+                                            <StackPanel Margin="0,3,10,3" Orientation="Horizontal">
+                                                <Grid Margin="5,0,5,0">
+                                                    <Viewbox
+                                                        Width="15"
+                                                        Height="10"
+                                                        Margin="0,-5,0,0">
+                                                        <Rectangle
+                                                            x:Name="Microphone"
+                                                            Width="10"
+                                                            Height="15"
+                                                            RadiusX="5"
+                                                            RadiusY="5"
+                                                            Stroke="#fff"
+                                                            StrokeThickness="1">
+                                                            <Rectangle.Fill>
+                                                                <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                                                                    <GradientStop Offset="{Binding VolumeLevel}" Color="Transparent" />
+                                                                    <GradientStop Offset="{Binding VolumeLevel}" Color="#fff" />
+                                                                </LinearGradientBrush>
+                                                            </Rectangle.Fill>
+                                                        </Rectangle>
+                                                    </Viewbox>
+                                                    <Viewbox
+                                                        Width="15"
+                                                        Height="10"
+                                                        Margin="0,5,0,0">
+                                                        <Grid>
+                                                            <Path Stroke="#fff" StrokeThickness="1">
+                                                                <Path.Data>
+                                                                    <GeometryGroup>
+                                                                        <LineGeometry StartPoint="7,8" EndPoint="7,12" />
+                                                                        <PathGeometry>
+                                                                            <PathGeometry.Figures>
+                                                                                <PathFigure StartPoint="0,0">
+                                                                                    <ArcSegment
+                                                                                        IsLargeArc="True"
+                                                                                        Point="14,0"
+                                                                                        Size="5,6"
+                                                                                        SweepDirection="Counterclockwise" />
+                                                                                </PathFigure>
+                                                                            </PathGeometry.Figures>
+                                                                        </PathGeometry>
+                                                                    </GeometryGroup>
+                                                                </Path.Data>
+                                                            </Path>
+                                                        </Grid>
+                                                    </Viewbox>
+                                                </Grid>
+                                                <Slider
+                                                    x:Name="Volume1"
+                                                    Width="80"
+                                                    Height="6"
+                                                    Margin="5,0,0,0"
+                                                    Maximum="100"
+                                                    Minimum="0"
+                                                    TickFrequency="1"
+                                                    Value="100" />
+                                                <TextBlock
+                                                    Width="35"
+                                                    Foreground="#fff"
+                                                    Text="{Binding ElementName=Volume1, Path=Value, StringFormat='{}{0:N0}%'}" />
+
+                                                <Path
+                                                    Width="15"
+                                                    Height="14"
+                                                    Margin="15,0,5,0"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"
+                                                    Data="{StaticResource RSDouYin.Icons.Speaker}"
+                                                    Fill="#FFFFFF"
+                                                    Stretch="Fill" />
+
+                                                <Slider
+                                                    x:Name="Volume2"
+                                                    Width="80"
+                                                    Height="6"
+                                                    Margin="5,0,0,0"
+                                                    Maximum="100"
+                                                    Minimum="0"
+                                                    TickFrequency="1"
+                                                    Value="100" />
+                                                <TextBlock
+                                                    Width="35"
+                                                    Foreground="#fff"
+                                                    Text="{Binding ElementName=Volume2, Path=Value, StringFormat='{}{0:N0}%'}" />
+
+
+                                            </StackPanel>
+
+                                            <StackPanel Margin="0,3,0,0" Orientation="Horizontal">
+                                                <!--<Border Margin="5,0,10,0" Style="{StaticResource RSDouYin.Styles.SplitVertical}" />-->
+                                                <Button
+                                                    Margin="0,0,3,0"
+                                                    Padding="5"
+                                                    VerticalAlignment="Center"
+                                                    rs:ControlsHelper.IconData="{StaticResource RSDouYin.Icons.BeautyFilter}"
+                                                    rs:ControlsHelper.IconHeight="14"
+                                                    rs:ControlsHelper.IconWidth="14"
+                                                    Style="{StaticResource RSDouYin.Styles.IconButton}"
+                                                    ToolTip="美颜" />
+
+                                                <Button
+                                                    Margin="3,0,3,0"
+                                                    Padding="5"
+                                                    VerticalAlignment="Center"
+                                                    rs:ControlsHelper.IconData="{StaticResource RSDouYin.Icons.Recorder}"
+                                                    rs:ControlsHelper.IconHeight="12"
+                                                    rs:ControlsHelper.IconWidth="14"
+                                                    Style="{StaticResource RSDouYin.Styles.IconButton}"
+                                                    ToolTip="回溯录制" />
+
+                                                <Button
+                                                    Margin="3,0,3,0"
+                                                    Padding="5"
+                                                    VerticalAlignment="Center"
+                                                    rs:ControlsHelper.IconData="{StaticResource RSDouYin.Icons.LocalRecorder}"
+                                                    rs:ControlsHelper.IconHeight="12"
+                                                    rs:ControlsHelper.IconWidth="14"
+                                                    Style="{StaticResource RSDouYin.Styles.IconButton}"
+                                                    ToolTip="本地录制" />
+
+                                                <Button
+                                                    Margin="3,0,3,0"
+                                                    Padding="5"
+                                                    VerticalAlignment="Center"
+                                                    rs:ControlsHelper.IconData="{StaticResource RSDouYin.Icons.Setting}"
+                                                    rs:ControlsHelper.IconHeight="14"
+                                                    rs:ControlsHelper.IconWidth="14"
+                                                    Style="{StaticResource RSDouYin.Styles.IconButton}"
+                                                    ToolTip="直播设置" />
+                                            </StackPanel>
+                                        </WrapPanel>
+                                        <Button
+                                            Grid.Column="1"
+                                            Content="01:54:08"
+                                            Style="{StaticResource RSDouYin.Styles.CloseLiveButton}" />
+                                    </Grid>
+                                </Border>
+                                <Border Grid.Row="1">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0" Orientation="Horizontal">
+                                            <Button
+                                                Padding="0,0,5,0"
+                                                rs:ControlsHelper.IconData="{StaticResource RSDouYin.Icons.Speaker}"
+                                                Style="{StaticResource RSDouYin.Styles.SystemIconInfo}" />
+                                        </StackPanel>
+                                        <Grid Grid.Column="1">
+                                            <Button
+                                                Margin="0"
+                                                Padding="0"
+                                                HorizontalAlignment="Left"
+                                                Content="年度嘉年华火热进行中，查看详情...">
+                                                <Button.Style>
+                                                    <Style BasedOn="{StaticResource RSDouYin.Styles.ButtonBase}" TargetType="{x:Type Button}">
+                                                        <Setter Property="Foreground" Value="#969091" />
+                                                        <Setter Property="Template">
+                                                            <Setter.Value>
+                                                                <ControlTemplate TargetType="{x:Type Button}">
+                                                                    <Border
+                                                                        Padding="{TemplateBinding Padding}"
+                                                                        Background="{TemplateBinding Background}"
+                                                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                                                        CornerRadius="{TemplateBinding rs:ControlsHelper.CornerRadius}">
+                                                                        <Grid>
+                                                                            <Grid.ColumnDefinitions>
+                                                                                <ColumnDefinition Width="auto" />
+                                                                                <ColumnDefinition />
+                                                                            </Grid.ColumnDefinitions>
+                                                                            <Border
+                                                                                Grid.Column="0"
+                                                                                Padding="5,0,5,0"
+                                                                                Background="#E54969"
+                                                                                CornerRadius="3">
+                                                                                <TextBlock
+                                                                                    VerticalAlignment="Center"
+                                                                                    Foreground="#FFF"
+                                                                                    Text="活动" />
+                                                                            </Border>
+                                                                            <TextBlock
+                                                                                Grid.Column="1"
+                                                                                Margin="5,0,0,0"
+                                                                                VerticalAlignment="Center"
+                                                                                Foreground="{TemplateBinding Foreground}"
+                                                                                Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Content}"
+                                                                                TextTrimming="CharacterEllipsis" />
+                                                                        </Grid>
+                                                                    </Border>
+                                                                    <ControlTemplate.Triggers>
+                                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                                            <Setter Property="Cursor" Value="Hand" />
+                                                                        </Trigger>
+                                                                    </ControlTemplate.Triggers>
+                                                                </ControlTemplate>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                    </Style>
+                                                </Button.Style>
+                                            </Button>
+                                        </Grid>
+
+                                        <StackPanel Grid.Column="2" Orientation="Horizontal">
+                                            <Button
+                                                Padding="5,0,0,0"
+                                                rs:ControlsHelper.IconData="{StaticResource RSDouYin.Icons.EnvironmentDetection}"
+                                                Style="{StaticResource RSDouYin.Styles.SystemIconInfo}" />
+
+                                            <TextBlock Margin="5,0,2,0" Style="{StaticResource RSDouYin.Styles.SystemInfo}">
+                                                <Run Text="CPU:" />
+                                                <Run Text="1.48%" />
+                                            </TextBlock>
+
+                                            <TextBlock Style="{StaticResource RSDouYin.Styles.SystemInfo}">
+                                                <Run Text="内存:" />
+                                                <Run Text="27.55%" />
+                                            </TextBlock>
+
+                                            <TextBlock Style="{StaticResource RSDouYin.Styles.SystemInfo}">
+                                                <Run Text="帧率:" />
+                                                <Run Text="30" />
+                                            </TextBlock>
+
+                                            <TextBlock Style="{StaticResource RSDouYin.Styles.SystemInfo}">
+                                                <Run Text="推流帧率:" />
+                                                <Run Text="30" />
+                                            </TextBlock>
+
+                                            <TextBlock Style="{StaticResource RSDouYin.Styles.SystemInfo}">
+                                                <Run Text="实时码率:" />
+                                                <Run Text="2178kb/s" />
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </Border>
+                <Grid Grid.Column="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="270" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Border
+                        Grid.Row="0"
+                        Padding="0"
+                        Style="{StaticResource RSDouYin.Styles.ContentBorder}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto" />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid Grid.Row="0" Margin="20,15,15,10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto" />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition Width="auto" />
+                                </Grid.ColumnDefinitions>
+                                <RadioButton
+                                    Margin="0"
+                                    Padding="0"
+                                    Content="在线观众榜"
+                                    Style="{StaticResource RSDouYin.Styles.TabBtnStyle}" />
+
+                                <Button
+                                    Grid.Column="2"
+                                    Margin="0"
+                                    Padding="5"
+                                    VerticalAlignment="Center"
+                                    rs:ControlsHelper.IconData="{StaticResource RSDouYin.Icons.WinSwap}"
+                                    rs:ControlsHelper.IconHeight="14"
+                                    rs:ControlsHelper.IconWidth="14"
+                                    Style="{StaticResource RSDouYin.Styles.IconButton}"
+                                    ToolTip="悬浮窗" />
+                            </Grid>
+
+
+                            <ScrollViewer Grid.Row="1" Margin="0,0,0,0">
+                                <ItemsControl
+                                    Margin="0,0,15,0"
+                                    ItemTemplate="{StaticResource AudienceModelDataTemplate}"
+                                    ItemsSource="{Binding AudienceModelList}" />
+                            </ScrollViewer>
+                        </Grid>
+                    </Border>
+
+                    <Border Grid.Row="1" Style="{StaticResource RSDouYin.Styles.ContentBorder}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto" />
+                                <RowDefinition />
+                                <RowDefinition Height="auto" />
+                            </Grid.RowDefinitions>
+                            <Grid Grid.Row="0" Margin="10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto" />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition Width="auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    FontSize="14"
+                                    Foreground="#fff"
+                                    Text="互动玩法" />
+                                <Button
+                                    Grid.Column="2"
+                                    Margin="0"
+                                    Padding="5"
+                                    VerticalAlignment="Center"
+                                    rs:ControlsHelper.IconData="{StaticResource RSDouYin.Icons.WinSwap}"
+                                    rs:ControlsHelper.IconHeight="14"
+                                    rs:ControlsHelper.IconWidth="14"
+                                    Style="{StaticResource RSDouYin.Styles.IconButton}"
+                                    ToolTip="悬浮窗" />
+                            </Grid>
+
+                            <Grid Grid.Row="1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition Height="auto" />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <ScrollViewer>
+                                    <Grid>
+                                        <TextBlock
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            FontSize="14"
+                                            Foreground="#949494"
+                                            Text="展示本场的直播礼物消息" />
+                                    </Grid>
+                                </ScrollViewer>
+                                <Border
+                                    Grid.Row="1"
+                                    Margin="10,10,15,10"
+                                    Style="{StaticResource RSDouYin.Styles.SplitHorizontal}" />
+                                <ScrollViewer x:Name="MsgScrollViewer" Grid.Row="2">
+                                    <StackPanel Margin="10">
+                                        <TextBlock
+                                            Foreground="#8CE7FF"
+                                            Text="欢迎来到直播间!抖音严禁未成年人直播或 打赏。直播间内严禁出现违法违规、低俗色 情、吸烟酗酒、人身伤害等内容。如主播在 直播过程中以不当方式诱导打赏、私下交 易，请谨慎判断，以防人身财产损失。请大 家注意财产安全，理性消费，谨防网络诈骗"
+                                            TextWrapping="WrapWithOverflow" />
+                                        <Border
+                                            Margin="0,8,0,0"
+                                            Padding="10,5,10,5"
+                                            Background="#444444">
+                                            <StackPanel>
+                                                <Border
+                                                    Width="20"
+                                                    Height="20"
+                                                    HorizontalAlignment="Left"
+                                                    CornerRadius="50">
+                                                    <Border.Background>
+                                                        <ImageBrush ImageSource="Assets/ross.jpeg" Stretch="Uniform" />
+                                                    </Border.Background>
+                                                </Border>
+
+                                                <TextBlock
+                                                    Margin="0,8,0,0"
+                                                    VerticalAlignment="Center"
+                                                    Foreground="#fff"
+                                                    TextWrapping="WrapWithOverflow">
+                                                    <InlineUIContainer>
+                                                        <Image
+                                                            Width="13"
+                                                            Height="13"
+                                                            Margin="0,0,0,0"
+                                                            VerticalAlignment="Center"
+                                                            Source="Assets/clap.png" />
+                                                    </InlineUIContainer>
+                                                    欢迎来到我的WPF直播间！YOLO机器学习标注软件开发。感兴趣请切换到横屏</TextBlock>
+                                            </StackPanel>
+                                        </Border>
+
+
+                                        <ItemsControl ItemsSource="{Binding MsgModelPageList}">
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <StackPanel IsItemsHost="True" />
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+                                        </ItemsControl>
+                                    </StackPanel>
+
+
+                                </ScrollViewer>
+                            </Grid>
+
+                            <Border
+                                Grid.Row="2"
+                                Margin="5,10,5,5"
+                                Background="#222222"
+                                CornerRadius="5">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition />
+                                        <ColumnDefinition Width="auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox
+                                        x:Name="TxtSendMessage"
+                                        Grid.Column="0"
+                                        rs:TextBoxHelper.IsShowClearBtn="False"
+                                        rs:TextBoxHelper.Watermark="说点什么..."
+                                        Background="#222222"
+                                        MaxLength="50"
+                                        PreviewKeyDown="BtnSendMsg_PreviewKeyDown"
+                                        Style="{StaticResource RSDouYin.Styles.TextBox}" />
+
+
+                                    <!--<Button
+                                        Grid.Column="1"
+                                        VerticalAlignment="Bottom"
+                                        Command="{Binding SendMsgCommand}"
+                                        CommandParameter="{Binding ElementName=TxtSendMessage}"
+                                        Content="发送"
+                                        Style="{StaticResource RSDouYin.Styles.SendMsgBtnStyle}" />-->
+
+                                    <Button
+                                        x:Name="BtnSendMsg"
+                                        Grid.Column="1"
+                                        VerticalAlignment="Bottom"
+                                        Click="BtnSendMsg_Click"
+                                        Content="发送"
+                                        Style="{StaticResource RSDouYin.Styles.SendMsgBtnStyle}" />
+                                </Grid>
+                            </Border>
+
+
+                            <StackPanel x:Name="DropHost" Background="Transparent" />
+                        </Grid>
+
+
+
+
+                    </Border>
+                </Grid>
+            </Grid>
+        </Border>
+
+        <Canvas x:Name="CanvasHost">
+            <Border
+                x:Name="DragContent"
+                Background="Transparent"
+                BorderThickness="2"
+                CornerRadius="5"
+                Visibility="Collapsed">
+                <Border.BorderBrush>
+                    <RadialGradientBrush x:Name="GradientBrush" Center="0.0,0.0" GradientOrigin="0,0" RadiusX="2" RadiusY="2">
+                        <GradientStop Offset="0.01" Color="Gold" />
+                        <GradientStop Offset="0.5" Color="#006CBE" />
+                    </RadialGradientBrush>
+                </Border.BorderBrush>
+            </Border>
+        </Canvas>
+    </Grid>
+
+
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="Window.Loaded">
+            <BeginStoryboard Storyboard="{StaticResource ScaleYAnimation}" />
+            <BeginStoryboard>
+                <Storyboard RepeatBehavior="Forever">
+                    <PointAnimationUsingKeyFrames Storyboard.TargetName="GradientBrush" Storyboard.TargetProperty="GradientOrigin">
+                        <EasingPointKeyFrame KeyTime="0:0:0" Value="0,0" />
+                        <EasingPointKeyFrame KeyTime="0:0:2" Value="1,0" />
+                        <EasingPointKeyFrame KeyTime="0:0:4" Value="1,1" />
+                        <EasingPointKeyFrame KeyTime="0:0:6" Value="0,1" />
+                        <EasingPointKeyFrame KeyTime="0:0:8" Value="0,0" />
+                    </PointAnimationUsingKeyFrames>
+                </Storyboard>
+            </BeginStoryboard>
+            <BeginStoryboard>
+                <Storyboard RepeatBehavior="Forever">
+                    <ColorAnimationUsingKeyFrames Storyboard.TargetName="BtnMonitor1" Storyboard.TargetProperty="Foreground.Color">
+                        <EasingColorKeyFrame KeyTime="0:0:0" Value="Red" />
+                        <EasingColorKeyFrame KeyTime="0:0:0.5" Value="Green" />
+                        <EasingColorKeyFrame KeyTime="0:0:1" Value="Red" />
+                    </ColorAnimationUsingKeyFrames>
+                </Storyboard>
+            </BeginStoryboard>
+
+
+            <BeginStoryboard x:Name="PopularityChartTest">
+                <Storyboard BeginTime="00:00:00" RepeatBehavior="Forever">
+                    <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="BtnPopularityChart" Storyboard.TargetProperty="Margin">
+                        <SplineThicknessKeyFrame KeyTime="00:00:00" Value="{Binding BeginThickness}" />
+                        <SplineThicknessKeyFrame KeyTime="00:00:00.8" Value="{Binding EndThickness}" />
+                        <SplineThicknessKeyFrame KeyTime="00:00:03" Value="{Binding EndThickness}" />
+                        <SplineThicknessKeyFrame KeyTime="00:00:03.0" Value="{Binding BeginThickness}" />
+                        <SplineThicknessKeyFrame KeyTime="00:00:06" Value="{Binding BeginThickness}" />
+                    </ThicknessAnimationUsingKeyFrames>
+                </Storyboard>
+            </BeginStoryboard>
+            <BeginStoryboard x:Name="HourChartTest">
+                <Storyboard BeginTime="00:00:00" RepeatBehavior="Forever">
+                    <ThicknessAnimationUsingKeyFrames Storyboard.TargetName="BtnHourChart" Storyboard.TargetProperty="Margin">
+                        <SplineThicknessKeyFrame KeyTime="00:00:03" Value="{Binding BeginThickness}" />
+                        <SplineThicknessKeyFrame KeyTime="00:00:03.8" Value="{Binding EndThickness}" />
+                        <SplineThicknessKeyFrame KeyTime="00:00:06" Value="{Binding EndThickness}" />
+                    </ThicknessAnimationUsingKeyFrames>
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+    </Window.Triggers>
+</rs:RSDouYinWindow>

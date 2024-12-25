@@ -1,0 +1,108 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:models="clr-namespace:RS.DouYinWidgets.Models"
+    xmlns:rs="clr-namespace:RS.DouYinWidgets.Controls">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/RS.DouYinWidgets;component/Styles/Controls.Boder.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/RS.DouYinWidgets;component/Styles/Controls.Button.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/RS.DouYinWidgets;component/Styles/Controls.Icons.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/RS.DouYinWidgets;component/Styles/Controls.RadioButton.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <!--<DataTemplate DataType="{x:Type models:ButtonModel}">
+        <RadioButton
+            Command="{Binding BtnCommand}"
+            Content="{Binding BtnDes}"
+            Style="{StaticResource RSDouYin.Styles.CommandBtnStyle}" />
+    </DataTemplate>-->
+
+
+    <Style TargetType="{x:Type rs:RSDropDownBtn}">
+        <Setter Property="Foreground" Value="#fff" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="10" />
+        <Setter Property="rs:ControlsHelper.IconWidth" Value="10" />
+        <Setter Property="rs:ControlsHelper.IconHeight" Value="6" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type rs:RSDropDownBtn}">
+                    <Border
+                        x:Name="PART_Border"
+                        Padding="{TemplateBinding Padding}"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="auto" />
+                            </Grid.ColumnDefinitions>
+                            <ContentControl Content="{TemplateBinding Content}" />
+                            <Path
+                                Grid.Column="1"
+                                Width="{TemplateBinding rs:ControlsHelper.IconWidth}"
+                                Height="{TemplateBinding rs:ControlsHelper.IconHeight}"
+                                Margin="5,0,0,0"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Data="{TemplateBinding rs:ControlsHelper.IconData}"
+                                Fill="#FFFFFF"
+                                Stretch="Fill" />
+                            <Popup
+                                x:Name="PART_Popup"
+                                Width="{TemplateBinding PopWidth}"
+                                Height="{TemplateBinding PopHeight}"
+                                AllowsTransparency="True"
+                                IsOpen="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=IsChecked}"
+                                Placement="Bottom"
+                                PlacementTarget="{Binding ElementName=PART_Border}"
+                                StaysOpen="False">
+                                <Border
+                                    Margin="20"
+                                    Background="#3D3D3D"
+                                    CornerRadius="5"
+                                    Style="{StaticResource RSDouYin.Styles.ContentBorder}">
+                                    <Border.Effect>
+                                        <DropShadowEffect
+                                            BlurRadius="15"
+                                            Direction="315"
+                                            Opacity="0.2"
+                                            ShadowDepth="0"
+                                            Color="#000" />
+                                    </Border.Effect>
+
+                                    <ItemsControl VerticalAlignment="Top" ItemsSource="{TemplateBinding ButtonModelList}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <UniformGrid
+                                                    Columns="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type rs:RSDropDownBtn}}, Path=PopCols}"
+                                                    IsItemsHost="True"
+                                                    Rows="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type rs:RSDropDownBtn}}, Path=PopCols}" />
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <RadioButton
+                                                    Command="{Binding BtnCommand}"
+                                                    Content="{Binding BtnDes}"
+                                                    GroupName="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type rs:RSDropDownBtn}}, Path=BtnGroupIndex, StringFormat='{}BtnCommandGrou{0}'}"
+                                                    Style="{StaticResource RSDouYin.Styles.CommandBtnStyle}" />
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </Border>
+                            </Popup>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Cursor" Value="Hand" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

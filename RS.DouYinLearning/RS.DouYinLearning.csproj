@@ -1,0 +1,50 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Assets\clap.png" />
+    <None Remove="Assets\Galgg.jpg" />
+    <None Remove="Assets\iconfont.ttf" />
+    <None Remove="Assets\lufeixue.jpg" />
+    <None Remove="Assets\lynnf.jpg" />
+    <None Remove="Assets\LzDic.jpg" />
+    <None Remove="Assets\MeetingInDreamShouldLeadToAcquaintance.jpg" />
+    <None Remove="Assets\ross.jpeg" />
+    <None Remove="Assets\secretgift.png" />
+    <None Remove="Assets\xiaohuzidashu.jpg" />
+    <None Remove="Assets\xiaoxianyu.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RS.DouYinUsercontrol\RS.DouYinUsercontrol.csproj" />
+    <ProjectReference Include="..\RS.DouYinWidgets\RS.DouYinWidgets.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\clap.png" />
+    <Resource Include="Assets\Galgg.jpg" />
+    <Resource Include="Assets\iconfont.ttf" />
+    <Resource Include="Assets\lufeixue.jpg" />
+    <Resource Include="Assets\lynnf.jpg" />
+    <Resource Include="Assets\LzDic.jpg" />
+    <Resource Include="Assets\MeetingInDreamShouldLeadToAcquaintance.jpg" />
+    <Resource Include="Assets\ross.jpeg" />
+    <Resource Include="Assets\secretgift.png" />
+    <Resource Include="Assets\xiaohuzidashu.jpg" />
+    <Resource Include="Assets\xiaoxianyu.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Assets\ocean.mp4">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

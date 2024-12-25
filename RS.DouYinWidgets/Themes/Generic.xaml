@@ -1,0 +1,8 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/RS.DouYinWidgets;component/Themes/RSDouYinWindow.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/RS.DouYinWidgets;component/Themes/RSDropDownBtn.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/RS.DouYinWidgets;component/Themes/RSPopBtn.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/RS.DouYinWidgets;component/Themes/RSSceneBtn.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+</ResourceDictionary>
